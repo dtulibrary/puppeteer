@@ -12,3 +12,6 @@ You need Docker to use this tool.
         $ ./run.sh <jessie|wheezy> <puppet-module>
 
 You can use the convenience scripts `jessie.sh` and `wheezy.sh` to skip the first argument.
+
+## Example
+        $ ./jessie.sh metastore::rabbitmq
