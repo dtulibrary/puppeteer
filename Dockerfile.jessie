@@ -1,0 +1,8 @@
+FROM debian:jessie
+
+RUN apt-get -q update && \
+    apt-get -yq install --no-install-recommends puppet
+
+COPY puppet_apply.sh /
+
+ENTRYPOINT ["/puppet_apply.sh"]
