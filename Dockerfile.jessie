@@ -1,8 +1,9 @@
 FROM debian:jessie
 
 RUN apt-get -q update && \
-    apt-get -yq install --no-install-recommends puppet
+    apt-get -yq install --no-install-recommends puppet lsb-release
 
 COPY puppet_apply.sh /
+COPY default.pp /
 
 ENTRYPOINT ["/puppet_apply.sh"]

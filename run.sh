@@ -3,7 +3,7 @@ default_puppet_home="$HOME/puppet"
 puppet_home=$PUPPET_HOME
 
 function usage {
-  echo "Usage: $0 <wheezy|jessie> <puppet-module>"
+  echo "Usage: $0 <wheezy|jessie> <puppet-manifest>"
   echo
   echo "Builds and runs a container for testing puppet code."
   echo
@@ -59,6 +59,9 @@ case $distro in
     exit 1
     ;;
 esac
+
+rm -f default.pp
+cp $2 default.pp
 
 docker build -f Dockerfile.$distro -t dtic/puppet-test:$distro .
 exec docker run -ti -e "MODULE_PATH=$module_path" -v "$puppet_home:/puppet" dtic/puppet-test:$distro $2
