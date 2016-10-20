@@ -18,15 +18,15 @@ You can use the convenience scripts `jessie.sh` and `wheezy.sh` to skip the firs
 
 $HOME/site.pp:
 
-        node default {
-          class {'metastore::controller5':
+    node default {
+        class {'metastore::controller5':
             conf_set => 'production'
-          }
         }
+    }
 
 ## Running the example
 
-        $ ./jessie.sh $HOME/site.pp
+    $ ./jessie.sh $HOME/site.pp
 
 Beware that the manifest will be copied to the puppeteer directory as `default.pp` and will overwrite
 any previous version of that file.
