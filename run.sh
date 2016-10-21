@@ -4,6 +4,7 @@ puppet_home=$PUPPET_HOME
 
 function usage {
   echo "Usage: $0 <docker-base-image> <puppet-manifest>"
+  echo "       $0 --help"
   echo
   echo "Builds and runs a container for testing puppet code."
   echo
@@ -23,6 +24,7 @@ if [[ -z $2 ]]; then
   exit 1
 fi
 
+# Check for puppet home
 if [[ -z $puppet_home ]]; then
   puppet_home=$default_puppet_home
   echo "PUPPET_HOME not set. Defaulting to '$puppet_home'."
@@ -33,30 +35,32 @@ if [[ ! -d $puppet_home ]]; then
   exit 1
 fi
 
-for mp in $(ls -d $puppet_home/* | sed -r 's/^.*(\/puppet\/.*)$/\1/'); do
-  mp=$mp/modules
-  if [[ -z $module_path ]]; then
-    module_path=$mp
-  else
-    module_path=$mp:$module_path
+# Build puppet modulepath
+for mp in $(ls -d $puppet_home/*); do
+  if [[ -d $mp/modules ]]; then
+    mp=$(echo $mp | sed -r 's/^.*(\/puppet\/.*)$/\1/')/modules
+    if [[ -z $module_path ]]; then
+      module_path=$mp
+    else
+      module_path=$mp:$module_path
+    fi
   fi
 done
-
-default_base_image=debian:jessie
-base_image=$1
-
-if [[ -z $base_image ]]; then
-  base_image=$default_base_image
-  echo "No base image argument given. Defaulting to '$base_image'."
-fi
 
 rm -f default.pp
 cp $2 default.pp
 
 # Build container
-cat Dockerfile.template | sed -r "s/\\\$DOCKER_BASE_IMAGE/$base_image/g" > Dockerfile
+base_image=$1
 tag=$(echo $base_image | tr ':' '_')
+cat Dockerfile.template | sed -r "s/\\\$DOCKER_BASE_IMAGE/$base_image/g" > Dockerfile
 docker build -t dtic/puppet-test:$tag .
+
+if [[ ! $? -eq 0 ]]; then
+  echo "Error building container."
+  exit 1
+fi
+
 rm Dockerfile
 
 # Run container
