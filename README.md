@@ -36,5 +36,11 @@ a Docker container will be built and run and the rabbitmq puppet module will be 
 from within using puppet apply. When puppet is done you will be dropped to a bash shell in the container
 for inspecting the state of the container.
 
+Since Docker base images are much smaller (have less packages pre-installed) than the standard OS distributions,
+you will either have to build your own base images that contain the packages, that your server environment has
+out-of-the-box from the OS distribution, or you have to build a more elaborate puppet setup and check for
+packages that are pre-installed in you server environment but is not part of the Docker base image corresponding
+to that environment.
+
 Beware that the manifest you're testing will be copied to the puppeteer directory as `default.pp` and will overwrite
 any previous version of that file.
