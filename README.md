@@ -1,6 +1,6 @@
 # Puppeteer
 
-Test your puppet modules in a Docker container on a variety of OS'es (currently Debian Wheezy and Debian Jessie).
+Test your puppet modules in a Docker container on a variety of OS'es.
 
 ## Using it
 
@@ -10,23 +10,31 @@ You need Docker to use this tool.
 * Write a manifest to be applied to the container.
 * Run
     
-        $ ./run.sh <jessie|wheezy> <puppet-manifest>
+        $ ./run.sh <docker-base-image> <puppet-manifest>
 
-You can use the convenience scripts `jessie.sh` and `wheezy.sh` to skip the first argument.
+You can use the convenience scripts `wheezy.sh`, `jessie.sh` and `stretch.sh` to skip the first argument
+if you're targeting either of the `debian:wheezy`, `debian:jessie` or `debian:stretch` docker base images
 
-## Example Manifest
+## Example
 
-$HOME/site.pp:
+Given we have defined a puppet module in `$PUPPET_HOME/my_puppet_stuff/modules/rabbitmq/init.pp` for 
+installing RabbitMQ. The module takes two parameters on initialization: username and password. To test
+this module we then define a manifest describing the `default` node:
 
     node default {
-        class {'metastore::controller5':
-            conf_set => 'production'
-        }
+      class {'rabbitmq':
+        username => 'rabbit',
+        password => 'rabbit'
+      }
     }
 
-## Running the example
+and we save this as $HOME/site.pp. Then by running
 
     $ ./jessie.sh $HOME/site.pp
 
-Beware that the manifest will be copied to the puppeteer directory as `default.pp` and will overwrite
+a Docker container will be built and run and the rabbitmq puppet module will be applied to this container
+from within using puppet apply. When puppet is done you will be dropped to a bash shell in the container
+for inspecting the state of the container.
+
+Beware that the manifest you're testing will be copied to the puppeteer directory as `default.pp` and will overwrite
 any previous version of that file.

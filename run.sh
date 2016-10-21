@@ -3,7 +3,7 @@ default_puppet_home="$HOME/puppet"
 puppet_home=$PUPPET_HOME
 
 function usage {
-  echo "Usage: $0 <wheezy|jessie> <puppet-manifest>"
+  echo "Usage: $0 <docker-base-image> <puppet-manifest>"
   echo
   echo "Builds and runs a container for testing puppet code."
   echo
@@ -41,27 +41,22 @@ for mp in $(ls -d $puppet_home/* | sed -r 's/^.*(\/puppet\/.*)$/\1/'); do
   fi
 done
 
-default_distro=jessie
-distro=$1
+default_base_image=debian:jessie
+base_image=$1
 
-if [[ -z $distro ]]; then
-  distro=$default_distro
-  echo "No distro argument given. Defaulting to '$distro'."
+if [[ -z $base_image ]]; then
+  base_image=$default_base_image
+  echo "No base image argument given. Defaulting to '$base_image'."
 fi
-
-case $distro in
-  wheezy)
-    ;;
-  jessie)
-    ;;
-  *)
-    usage
-    exit 1
-    ;;
-esac
 
 rm -f default.pp
 cp $2 default.pp
 
-docker build -f Dockerfile.$distro -t dtic/puppet-test:$distro .
-exec docker run -ti -e "MODULE_PATH=$module_path" -v "$puppet_home:/puppet" dtic/puppet-test:$distro $2
+# Build container
+cat Dockerfile.template | sed -r "s/\\\$DOCKER_BASE_IMAGE/$base_image/g" > Dockerfile
+tag=$(echo $base_image | tr ':' '_')
+docker build -t dtic/puppet-test:$tag .
+rm Dockerfile
+
+# Run container
+exec docker run -ti -e "MODULE_PATH=$module_path" -v "$puppet_home:/puppet" dtic/puppet-test:$tag $2

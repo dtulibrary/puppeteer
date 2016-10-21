@@ -1,9 +1,0 @@
-FROM debian:wheezy
-
-RUN apt-get -q update && \
-    apt-get -yq install --no-install-recommends puppet
-
-COPY puppet_apply.sh /
-COPY default.pp /
-
-ENTRYPOINT ["/puppet_apply.sh"]
