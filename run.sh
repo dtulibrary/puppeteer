@@ -9,9 +9,10 @@ function usage {
   echo
   echo "Environment variables:"
   echo
-  echo "  PUPPET_HOME : Where to find the 'restricted' and"
-  echo "                the 'shared' puppet module directories."
-  echo '                Default is "$HOME/puppet"'
+  echo "  PUPPET_HOME : Where to find the puppet repositories."
+  echo "                For each of these, the path to the"
+  echo "                'modules' subdirectory will be added to"
+  echo "                the module path for puppet to search."
 }
 
 if [[ -z $2 ]]; then
