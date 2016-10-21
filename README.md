@@ -32,7 +32,7 @@ and we save this as $HOME/site.pp. Then by running
 
     $ ./jessie.sh $HOME/site.pp
 
-a Docker container will be built and run and the rabbitmq puppet module will be applied to this container
+a `debian:jessie`-based Docker container will be built and run and the rabbitmq puppet module will be applied to this container
 from within using puppet apply. When puppet is done you will be dropped to a bash shell in the container
 for inspecting the state of the container.
 
