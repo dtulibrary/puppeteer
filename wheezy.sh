@@ -1,2 +1,2 @@
 #!/bin/bash
-exec ./run.sh wheezy $@
+exec ./run.sh debian:wheezy $@

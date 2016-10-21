@@ -1,2 +1,2 @@
 #!/bin/bash
-exec ./run.sh jessie $@
+exec ./run.sh debian:jessie $@

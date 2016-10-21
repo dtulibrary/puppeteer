@@ -1,2 +1,2 @@
 #!/bin/bash
-exec ./run.sh stretch $@
+exec ./run.sh debian:stretch $@
