@@ -17,6 +17,10 @@ if you're targeting either of the `debian:wheezy`, `debian:jessie` or `debian:st
 
 ## Example
 
+Quick run:
+
+  `./jessie.sh manifests/test.pp`
+
 Given we have defined a puppet module in `$PUPPET_HOME/my_puppet_stuff/modules/rabbitmq/init.pp` for 
 installing RabbitMQ. The module takes two parameters on initialization: username and password. To test
 this module we then define a manifest describing the `default` node:
