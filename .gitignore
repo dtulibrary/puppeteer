@@ -1,3 +1,4 @@
 .*.swp
 default.pp
 Dockerfile
+manifests/*
