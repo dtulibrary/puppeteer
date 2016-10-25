@@ -38,7 +38,7 @@ fi
 # Build puppet modulepath
 for mp in $(ls -d $puppet_home/*); do
   if [[ -d $mp/modules ]]; then
-    mp=$(echo $mp | sed -r 's/^.*(\/puppet\/.*)$/\1/')/modules
+    mp="/puppet/$(echo $mp | sed -r 's/.*\/[^\/]+\/([^\/]+)$/\1/')/modules"
     if [[ -z $module_path ]]; then
       module_path=$mp
     else
