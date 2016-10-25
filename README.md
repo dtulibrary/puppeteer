@@ -15,11 +15,11 @@ You need Docker to use this tool.
 You can use the convenience scripts `wheezy.sh`, `jessie.sh` and `stretch.sh` to skip the first argument
 if you're targeting either of the `debian:wheezy`, `debian:jessie` or `debian:stretch` docker base images
 
+## Test your setup
+
+    $ ./jessie.sh manifests/test.pp
+
 ## Example
-
-Quick run:
-
-  `./jessie.sh manifests/test.pp`
 
 Given we have defined a puppet module in `$PUPPET_HOME/my_puppet_stuff/modules/rabbitmq/init.pp` for 
 installing RabbitMQ. The module takes two parameters on initialization: username and password. To test
