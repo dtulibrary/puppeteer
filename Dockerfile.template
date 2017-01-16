@@ -1,7 +1,9 @@
 FROM $DOCKER_BASE_IMAGE
 
 RUN apt-get -q update && \
-    apt-get -yq install --no-install-recommends puppet lsb-release
+    apt-get -yq install --no-install-recommends puppet lsb-release \
+    vim \
+    curl
 
 COPY puppet_apply.sh /
 COPY default.pp /
