@@ -1,6 +1,6 @@
 # Puppeteer
 
-Test your puppet modules in a Docker container on a variety of OS'es.
+Test your puppet modules in a Docker container on a variety of OS'es (currently only ones that use the apt package manager).
 
 ## Using it
 
