@@ -1,6 +1,4 @@
 #!/bin/bash
-default_puppet_home="$HOME/puppet"
-puppet_home=$PUPPET_HOME
 
 function usage {
   echo "Usage: $0 <docker-base-image> <puppet-manifest>"
@@ -24,21 +22,21 @@ if [[ -z $2 ]]; then
   exit 1
 fi
 
-# Check for puppet home
-if [[ -z $puppet_home ]]; then
-  puppet_home=$default_puppet_home
-  echo "PUPPET_HOME not set. Defaulting to '$puppet_home'."
+# Check for PUPPET_HOME
+if [[ -z $PUPPET_HOME ]]; then
+  PUPPET_HOME=$HOME/puppet
+  echo "PUPPET_HOME not set. Defaulting to '$PUPPET_HOME'."
 fi
 
-if [[ ! -d $puppet_home ]]; then
-  echo "PUPPET_HOME not found or not a directory: $puppet_home"
+if [[ ! -d $PUPPET_HOME ]]; then
+  echo "PUPPET_HOME: '$PUPPET_HOME' not found or not a directory"
   exit 1
 fi
 
 # Build puppet modulepath
-for mp in $(ls -d $puppet_home/*); do
+for mp in $(ls -d $PUPPET_HOME/*); do
   if [[ -d $mp/modules ]]; then
-    mp="/puppet/$(echo $mp | sed -r 's/.*\/([^\/]+)$/\1/')/modules"
+    mp="/puppet/${mp##*/}/modules"
     if [[ -z $module_path ]]; then
       module_path=$mp
     else
@@ -64,4 +62,4 @@ fi
 rm Dockerfile
 
 # Run container
-exec docker run -ti -e "MODULE_PATH=$module_path" -v "$puppet_home:/puppet" dtic/puppet-test:$tag $2
+exec docker run -ti -e "MODULE_PATH=$module_path" -v "$PUPPET_HOME:/puppet" dtic/puppet-test:$tag $2
