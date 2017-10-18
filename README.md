@@ -22,7 +22,7 @@ if you're targeting either of the `debian:wheezy`, `debian:jessie` or `debian:st
 ## Example
 
 Given we have defined a puppet module in `$PUPPET_HOME/my_puppet_stuff/modules/rabbitmq/manifests/init.pp` for 
-installing RabbitMQ. The module takes two parameters on initialization: username and password. To test
+installing RabbitMQ. The module takes two parameters on initialization: `username` and `password`. To test
 this module we then define a manifest describing the `default` node:
 
     node default {
@@ -32,19 +32,17 @@ this module we then define a manifest describing the `default` node:
       }
     }
 
-and we save this as $HOME/site.pp. Then by running
+and we save this in `manifests/rabbitmq_test.pp` in the puppeteer directory. The contents of this directory is on the git ignore list, so don't worry about cluttering it with your own test manifests. You can of course save your test manifests in any directory you want to.
 
-    $ ./jessie.sh $HOME/site.pp
+Now by running
+
+    $ ./jessie.sh manifests/rabbitmq_test.pp
 
 a `debian:jessie`-based Docker container will be built and run and the rabbitmq puppet module will be applied to this container
 from within using puppet apply. When puppet is done you will be dropped to a bash shell in the container
 for inspecting the state of the container.
 
-Since Docker base images are much smaller (have less packages pre-installed) than the standard OS distributions,
-you will either have to build your own base images that contain the packages, that your server environment has
-out-of-the-box from the OS distribution, or you have to build a more elaborate puppet setup and check for
-packages that are pre-installed in you server environment but is not part of the Docker base image corresponding
-to that environment.
+Since Docker base images are much smaller (have less packages pre-installed) than the standard OS distributions, you will likely run into situations, where you have relied on the OS distribution to install certain packages, that will not be available in the smaller Docker base image. In this case, you will either have to build your own base images that contain the packages, that your server environment has out-of-the-box from the OS distribution, or you have to build a more elaborate puppet setup and check for packages that are pre-installed in you server environment but is not part of the Docker base image corresponding to that environment.
 
 Beware that the manifest you're testing will be copied to the puppeteer directory as `default.pp` and will overwrite
 any previous version of that file.
