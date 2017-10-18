@@ -26,7 +26,7 @@ installing RabbitMQ. The module takes two parameters on initialization: username
 this module we then define a manifest describing the `default` node:
 
     node default {
-      class {'rabbitmq':
+      class { 'rabbitmq':
         username => 'rabbit',
         password => 'rabbit'
       }
